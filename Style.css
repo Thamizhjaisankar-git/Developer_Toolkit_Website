@@ -1,0 +1,112 @@
+html {
+  scroll-behavior: smooth;
+}
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+
+        /* Code block styling */
+        .code-block {
+            position: relative;
+        }
+        .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .code-block:hover .copy-button {
+            opacity: 1;
+        }
+
+        /* Sidebar styling */
+        .sidebar-nav a {
+            transition: all 0.2s ease;
+        }
+        .sidebar-nav a:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 2px solid #3b82f6;
+            padding-left: 0.75rem;
+        }
+        .sidebar-nav a.active {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 2px solid #3b82f6;
+            padding-left: 0.75rem;
+            color: #3b82f6;
+        }
+
+        /* Tab styling */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Minimal animations */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+
+        /* Tailwind class suggestion: */
+.doc-link.bg-blue-600 {
+  background-color: #2563eb;
+  color: white;
+}
+
+/* #page-installation h1{
+    font-weight: 900;
+    font-size: 30px;
+    margin-bottom: 10px;
+} */
+
+#page-installation h1,
+#page-quickstart h1,
+#page-configuration h1,
+#page-CodeAnalysis h1,
+#page-Integrations h1,
+#page-Plugins h1,
+#page-CustomRules h1,
+#page-Cicd h1,
+#page-Teammgmt h1 
+ {
+    font-weight: 900;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+#page-installation h2,
+#page-quickstart h2,
+#page-configuration h2,
+#page-CodeAnalysis h2,
+#page-Integrations h2,
+#page-Plugins h2,
+#page-CustomRules h2,
+#page-Cicd h2,
+#page-Teammgmt h2 {
+    font-weight: 700;
+    margin-top: 10px;
+    
+}
+
+pre{
+    border-radius: 5px;
+}
+ 
