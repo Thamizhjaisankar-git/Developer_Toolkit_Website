@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevTools Pro - The Ultimate Developer Tool</title>
+    <link href="./output.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8'
+                        }
+                    },
+                    fontFamily: {
+                        mono: ['JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <style>
+        html {
+  scroll-behavior: smooth;
+}
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+
+        /* Code block styling */
+        .code-block {
+            position: relative;
+        }
+        .copy-button {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .code-block:hover .copy-button {
+            opacity: 1;
+        }
+
+        /* Sidebar styling */
+        .sidebar-nav a {
+            transition: all 0.2s ease;
+        }
+        .sidebar-nav a:hover {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 2px solid #3b82f6;
+            padding-left: 0.75rem;
+        }
+        .sidebar-nav a.active {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 2px solid #3b82f6;
+            padding-left: 0.75rem;
+            color: #3b82f6;
+        }
+
+        /* Tab styling */
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Minimal animations */
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+
+        /* Tailwind class suggestion: */
+.doc-link.bg-blue-600 {
+  background-color: #2563eb;
+  color: white;
+}
+
+/* #page-installation h1{
+    font-weight: 900;
+    font-size: 30px;
+    margin-bottom: 10px;
+} */
+
+#page-installation h1,
+#page-quickstart h1,
+#page-configuration h1,
+#page-CodeAnalysis h1,
+#page-Integrations h1,
+#page-Plugins h1,
+#page-CustomRules h1,
+#page-Cicd h1,
+#page-Teammgmt h1 
+ {
+    font-weight: 900;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+#page-installation h2,
+#page-quickstart h2,
+#page-configuration h2,
+#page-CodeAnalysis h2,
+#page-Integrations h2,
+#page-Plugins h2,
+#page-CustomRules h2,
+#page-Cicd h2,
+#page-Teammgmt h2 {
+    font-weight: 700;
+    margin-top: 10px;
+    
+}
+
+pre{
+    border-radius: 5px;
+}
+/* 
+#page-configuration h1{
+    font-weight: 900;
+    font-size: 30px;
+    margin-bottom: 10px;
+} */
+
+    </style>
+</head>
+
+
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div id="main-content">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="bg-blue-600 p-2 rounded-md">
+                        <i class="fas fa-terminal text-white text-sm"></i>
+                    </div>
+                    <span class="text-lg font-semibold">DevTools Pro</span>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link text-sm font-medium hover:text-blue-600 transition-colors">Home</a>
+                    <a href="#docs" class="nav-link text-sm font-medium hover:text-blue-600 transition-colors">Docs</a>
+                    <a href="#api" class="nav-link text-sm font-medium hover:text-blue-600 transition-colors">API</a>
+                    <a href="#cli" class="nav-link text-sm font-medium hover:text-blue-600 transition-colors">CLI</a>
+                    <a href="#changelog" class="nav-link text-sm font-medium hover:text-blue-600 transition-colors">Changelog</a>
+                </nav>
+
+                <!-- Theme Toggle & CTA -->
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <i id="theme-icon" class="fas fa-moon text-sm"></i>
+                    </button>
+                    <a href="https://github.com/Thamizhjaisankar-git" class="hidden md:flex items-center space-x-2 text-sm font-medium hover:text-blue-600 transition-colors">
+                        <i class="fab fa-github"></i>
+                        <span>GitHub</span>
+                    </a>
+                    <!-- <button onclick="overlay(() => {
+                        let modelid = document.getElementById('welcome-modal');
+                        modelid.style.display = 'block';
+                    })" class="hidden md:inline-flex bg-blue-600 hover:bg-blue-100 hover:text-blue-600  text-sm px-4 py-2 rounded-md transition-colors">
+                       <a class="text-sm font-medium text-white hover:bg-blue-100 hover:text-blue-600 transition-colors">Get Started</a> 
+                    </button> -->
+
+                    <button onclick="showOverlay()" class="hidden md:inline-flex bg-blue-600 hover:bg-blue-100 hover:text-blue-600 text-sm px-4 py-2 rounded-md transition-colors">
+                     <span class="text-sm font-medium text-white">Get Started</span>
+                    </button>
+
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <i id="mobile-menu-icon" class="fas fa-bars text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+
+            
+            <!-- Mobile Navigation -->
+            <div id="mobile-menu" class="hidden md:hidden py-4 border-t border-gray-200 dark:border-gray-800">
+                <nav class="flex flex-col space-y-3">
+                    <a href="#home" class="nav-link text-sm font-medium hover:text-blue-600 transition-colors">Home</a>
+                    <a href="#docs" class="nav-link text-sm font-medium hover:text-blue-600 transition-colors">Docs</a>
+                    <a href="#api" class="nav-link text-sm font-medium hover:text-blue-600 transition-colors">API</a>
+                    <a href="#cli" class="nav-link text-sm font-medium hover:text-blue-600 transition-colors">CLI</a>
+                    <a href="#changelog" class="nav-link text-sm font-medium hover:text-blue-600 transition-colors">Changelog</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+ 
+
+    <!-- welcome tab when come to website-->
+
+        <!-- Centered Full-Screen Modal Overlay for get started-->
+<div id="welcome-modal" class="fixed inset-0 z-50 bg-black/50">
+  <div class="flex items-center justify-center min-h-screen">
+    <div class="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-xl max-w-md w-full relative mx-4">
+      <!-- Close Button -->
+      <button id="close-modal" class="absolute top-2 right-3 text-gray-500 hover:text-gray-800 dark:hover:text-white text-lg">&times;</button>
+
+      <!-- Modal Content -->
+      <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white text-center">👋 Welcome to DevTools Pro</h2>
+      <p class="text-gray-600 dark:text-gray-300 mb-6 text-center">
+        Start analyzing and optimizing your code like a pro. Choose how you'd like to begin:
+      </p>
+      
+      <!-- Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4">
+        <button id="start-trial" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg w-full">
+          Continue with Free Trial
+        </button>
+        <button id="view-pricing" class="bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-lg w-full dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white">
+          View Pricing
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <!-- Home Section -->
+    <section id="home" class="section-content">
+        <!-- Hero -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20"> 
+            <div class="max-w-3xl">
+                <div class="inline-flex items-center px-3 py-1 rounded-full text-xs bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 mb-6">
+                    <i class="fas fa-rocket mr-2"></i>
+                    v2.1.0 - Now with AI-powered code analysis
+                </div>
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                    The developer tool that <span class="text-blue-600">actually works</span>
+                </h1>
+                <p class="text-xl text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                    DevTools Pro streamlines your development workflow with intelligent code analysis, 
+                    seamless integrations, and powerful automation. Built by developers, for developers.
+                </p>
+                
+                <!-- Quick Start -->
+                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-8">
+                    <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Quick Start</h3>
+                    <div class="code-block">
+                        <pre class="bg-gray-900 text-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code class="language-bash"># Install DevTools Pro
+npm install -g devtools-pro
+
+# Initialize in your project
+devtools init
+
+# Start analyzing
+devtools analyze</code></pre>
+                        <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+                            <i class="fas fa-copy mr-1"></i>Copy
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                   
+                   <button id="priceBtn" class="nav-link bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-medium transition-colors">
+                        Pricing plans
+                        </button>
+
+
+                    <button class="border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 px-6 py-3 rounded-md font-medium transition-colors">
+                        View Documentation
+                    </button>
+                </div>   
+            </div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:border-blue-300 dark:hover:border-blue-600 transition-colors">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-code text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-3">Smart Analysis</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        AI-powered code analysis with real-time feedback and intelligent suggestions.
+                    </p>
+                </div>
+
+                <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:border-blue-300 dark:hover:border-blue-600 transition-colors">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-terminal text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-3">CLI Integration</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        Powerful command-line interface with custom commands and shortcuts.
+                    </p>
+                </div>
+
+                <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:border-blue-300 dark:hover:border-blue-600 transition-colors">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-plug text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-3">Extensible</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        Rich plugin ecosystem with support for all major frameworks and tools.
+                    </p>
+                </div>
+
+                <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:border-blue-300 dark:hover:border-blue-600 transition-colors">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-shield-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-3">Security First</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        Built-in security scanning and vulnerability detection.
+                    </p>
+                </div>
+
+                <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:border-blue-300 dark:hover:border-blue-600 transition-colors">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-3">Team Ready</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        Collaborative features with shared configurations and team insights.
+                    </p>
+                </div>
+
+                <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:border-blue-300 dark:hover:border-blue-600 transition-colors">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fas fa-chart-line text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-3">Analytics</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                        Comprehensive metrics and insights for your development workflow.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Documentation Section -->
+    <section id="docs" class="section-content hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex">
+                <!-- Sidebar -->
+                <div class="hidden lg:block w-64 pr-8">
+                    <div class="sticky top-24">
+                        <nav class="sidebar-nav space-y-1">
+                            <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">
+                                Getting Started
+                            </div>
+                            <a href="#" class="doc-link block py-2 px-3 text-sm rounded-md active" data-page="installation">Installation</a>
+                            <a href="#" class="doc-link block py-2 px-3 text-sm rounded-md" data-page="quickstart">Quick Start</a>
+                            <a href="#" class="doc-link block py-2 px-3 text-sm rounded-md" data-page="configuration">Configuration</a>
+                            
+                            <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3 mt-6">
+                                Core Features
+                            </div>
+                            <a href="#" class="doc-link block py-2 px-3 text-sm rounded-md" data-page="CodeAnalysis">Code Analysis</a>
+                            <a href="#" class="doc-link block py-2 px-3 text-sm rounded-md" data-page="Integrations">Integrations</a>
+                            <a href="#" class="doc-link block py-2 px-3 text-sm rounded-md" data-page="Plugins">Plugins</a>
+                            
+                            <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3 mt-6">
+                                Advanced
+                            </div>
+                            <a href="#" class="doc-link block py-2 px-3 text-sm rounded-md" data-page="CustomRules">Custom Rules</a>
+                            <a href="#" class="doc-link block py-2 px-3 text-sm rounded-md" data-page="Cicd">CI/CD Integration</a>
+                            <a href="#" class="doc-link block py-2 px-3 text-sm rounded-md" data-page="Teammgmt">Team Management</a>
+                        </nav>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- .......................test doc -->
+
+   <!-- Documentation Content Area -->
+      
+<!-- ................ -->
+
+<!-- Main Content -->
+<div class="flex-1 max-w-3xl">
+
+  <!-- ✅ Wrap entire installation block -->
+  <div id="page-installation" class="doc-page">
+    <div class="prose prose-blue dark:prose-invert max-w-none">
+      <h1>Installation</h1>
+      <p class="lead">Get started with DevTools Pro in minutes. Choose your preferred installation method below.</p>
+
+      <h2>Prerequisites</h2>
+      <ul>
+        <li>Node.js 16.0 or higher</li>
+        <li>npm 7.0 or higher (or yarn 1.22+)</li>
+        <li>Git 2.0 or higher</li>
+      </ul>
+
+      <h2>Installation Methods</h2>
+
+      <!-- Tabs -->
+      <div class="not-prose mb-6">
+        <div class="border-b border-gray-200 dark:border-gray-700">
+          <nav class="-mb-px flex space-x-8">
+            <button class="tab-button py-2 px-1 border-b-2 border-blue-500 text-blue-600 text-sm font-medium" data-tab="npm">
+              npm
+            </button>
+            <button class="tab-button py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 text-sm font-medium" data-tab="yarn">
+              Yarn
+            </button>
+            <button class="tab-button py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 text-sm font-medium" data-tab="docker">
+              Docker
+            </button>
+          </nav>
+        </div>
+
+        <div class="mt-4">
+          <div id="npm-tab" class="tab-content active">
+            <div class="code-block">
+              <pre class="bg-gray-900 text-gray-100 p-4 rounded-md text-sm overflow-x-auto">
+<code class="language-bash"># Install globally
+npm install -g devtools-pro
+
+# Or install locally in your project
+npm install --save-dev devtools-pro</code></pre>
+              <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+                <i class="fas fa-copy mr-1"></i>Copy
+              </button>
+            </div>
+          </div>
+
+          <div id="yarn-tab" class="tab-content">
+            <div class="code-block">
+              <pre class="bg-gray-900 text-gray-100 p-4 rounded-md text-sm overflow-x-auto">
+<code class="language-bash"># Install globally
+yarn global add devtools-pro
+
+# Or install locally in your project
+yarn add --dev devtools-pro</code></pre>
+              <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+                <i class="fas fa-copy mr-1"></i>Copy
+              </button>
+            </div>
+          </div>
+
+          <div id="docker-tab" class="tab-content">
+            <div class="code-block">
+              <pre class="bg-gray-900 text-gray-100 p-4 rounded-md text-sm overflow-x-auto">
+<code class="language-bash"># Pull the Docker image
+docker pull devtools/pro:latest
+
+# Run with your project mounted
+docker run -v $(pwd):/workspace devtools/pro:latest analyze</code></pre>
+              <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+                <i class="fas fa-copy mr-1"></i>Copy
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <h2>Verify Installation</h2>
+      <p>After installation, verify that DevTools Pro is working correctly:</p>
+
+      <div class="not-prose">
+        <div class="code-block">
+          <pre class="bg-gray-900 text-gray-100 p-4 rounded-md text-sm overflow-x-auto">
+<code class="language-bash">devtools --version
+# Should output: DevTools Pro v2.1.0</code></pre>
+          <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+            <i class="fas fa-copy mr-1"></i>Copy
+          </button>
+        </div>
+      </div>
+
+      <h2>Next Steps</h2>
+      <p>Now that you have DevTools Pro installed, you can:</p>
+      <ul>
+        <li><a href="#" class="text-blue-600 hover:text-blue-700">Initialize your first project</a></li>
+        <li><a href="#" class="text-blue-600 hover:text-blue-700">Configure analysis rules</a></li>
+        <li><a href="#" class="text-blue-600 hover:text-blue-700">Set up integrations</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ✅ Other sections already correct -->
+  <div id="page-quickstart" class="doc-page hidden">
+  <h1>Quick Start</h1>
+  <p class="lead">Get DevTools Pro up and running quickly by following these steps.</p>
+
+  <h2>Step 1: Initialize</h2>
+  <p>Run the following command to create a configuration file:</p>
+  <div class="code-block">
+      <pre ><code class="language-bash">devtools init</code></pre>
+      <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+            <i class="fas fa-copy mr-1"></i>Copy
+          </button>
+  </div>
+
+  <h2>Step 2: Run Analysis</h2>
+  <p>Use this command to analyze your project:</p>
+  <div class="code-block">
+  <pre><code class="language-bash">devtools analyze</code></pre>
+        <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+            <i class="fas fa-copy mr-1"></i>Copy
+        </button>
+    </div>
+
+  <h2>Step 3: Review Output</h2>
+  <p>Check the generated reports in your terminal or output directory.</p>
+  
+  <ul>
+    <li>-- Complexity Report</li>
+    <li>-- Style Consistency</li>
+    <li>-- Unused Dependencies</li>
+    <li>-- Security Warnings</li>
+  </ul>
+  <p><strong>Next:</strong> <a href="#page-configuration">Configure rules</a> | <a href="#page-integrations">Integrate with CI</a></p>
+
+</div>
+
+<!-- ........... -->
+
+ 
+<div id="page-configuration" class="doc-page hidden">
+  <h1>Configuration</h1>
+  <p>Customize DevTools Pro using a `devtools.config.js` file at the root of your project.</p>
+
+  <h2>Basic Example</h2>
+  <div class="code-block">
+  <pre><code class="language-js">module.exports = {
+  rules: {
+    "no-console": "warn",
+    "indent": ["error", 2]
+  }
+};</code></pre>
+    <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+            <i class="fas fa-copy mr-1"></i>Copy
+          </button>
+</div>
+
+
+  <p>Fine-tune DevTools Pro to match your workflow.</p>
+  <h2>devtools.config.js</h2>
+  <div class="code-block">
+  <pre><code class="language-js">module.exports = {
+  rules: {
+    "no-dead-code": true,
+    "complexity-threshold": 15,
+    "security-audit": true
+  },
+  exclude: ["node_modules", "dist", "test/"],
+  output: "reports/"
+}</code></pre>
+<button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+            <i class="fas fa-copy mr-1"></i>Copy
+          </button>
+</div>
+
+  <h2>Custom Rulesets</h2>
+  <ul>
+    <li>-- Enable/disable rule categories</li>
+    <li>-- Auto-fix supported issues</li>
+    <li>-- Set severity levels (info, warning, error)</li>
+  </ul>
+  <h2>Advanced Options</h2>
+
+  <ul>
+    <li><strong>ignorePatterns</strong> – Exclude files/folders from analysis.</li>
+    <li><strong>plugins</strong> – Add custom analysis plugins.</li>
+  </ul>
+</div>
+
+<!-- ............. -->
+
+
+<div id="page-CodeAnalysis" class="doc-page hidden">
+  <h1>Code Analysis</h1>
+  <p class="mb-4">Automated static code analysis helps ensure your code quality, detects errors, and enforces standards — before you even push to production.</p>
+
+  <!-- Live Code Analysis Visual -->
+  <div class="relative bg-gray-900 text-gray-100 rounded-lg p-6 shadow-md mb-6">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-semibold text-green-400">Live Analysis in Action</h2>
+      <span class="bg-green-600 text-white text-xs px-2 py-1 rounded-full animate-pulse">Analyzing...</span>
+    </div>
+    <div class="code-block">
+    <pre class="text-sm overflow-x-auto">
+<code>// Example: JavaScript Linting
+
+function fetchUserData(userId) {
+    if(!userId){
+        console.warn("No user ID provided");
+        return;
+    }
+
+    return fetch(`/api/users/${userId}`)
+        .then(response => response.json())
+        .catch(err => console.error("Failed to fetch user", err));
+}</code>
+    </pre>
+    <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+            <i class="fas fa-copy mr-1"></i>Copy
+          </button>
+    </div>
+
+
+    <div class="mt-4 bg-gray-800 p-3 rounded text-sm text-yellow-300">
+      <p><strong>Warning:</strong> Missing input validation on <code>userId</code>.</p>
+      <p><strong>Info:</strong> Consider using async/await instead of <code>.then()</code> for better readability.</p>
+    </div>
+  </div>
+
+  <!-- Key Features -->
+  <h2 class="text-xl font-bold mb-2">Key Features</h2>
+  <ul class="list-disc ml-5 text-base text-gray-900 dark:text-gray-100 space-y-2">
+    <li>Real-time static analysis on file save</li>
+    <li>Supports multiple languages: JS, TS, Python, Go, Java, etc.</li>
+    <li>Custom rule sets and severity levels</li>
+    <li>Inline error reporting and quick fixes</li>
+    <li>CI-ready reports with pass/fail thresholds</li>
+  </ul>
+
+  <!-- How it Works -->
+  <h2 class="text-xl font-bold mt-8 mb-2">How It Works</h2>
+  <ol class="list-decimal ml-6 text-base text-gray-900 dark:text-gray-100 space-y-2">
+    <li>DevTools Pro scans your codebase using static analyzers.</li>
+    <li>It maps errors and warnings inline for quick review.</li>
+    <li>Analysis results are displayed in both terminal and dashboard.</li>
+    <li>You can export reports in HTML, JSON, or CSV format.</li>
+  </ol>
+
+  <!-- Tip -->
+  <div class="mt-6 bg-blue-800/30 border-l-4 border-blue-500 p-4 text-sm dark:text-blue-100 text-gray-900 rounded">
+    💡 <strong>Pro Tip:</strong> You can integrate Code Analysis in your pre-commit hook using <code>husky</code> or <code>lint-staged</code>.
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+<div id="page-Integrations" class="doc-page hidden">
+  <h1>Integrations</h1>
+   <p>Connect DevTools Pro to your ecosystem.</p>
+  <h2>Supported Tools</h2>
+  <ul>
+    <li>-- GitHub Actions</li>
+    <li>-- GitLab CI/CD</li>
+    <li>-- Bitbucket Pipelines</li>
+    <li>-- Jenkins / CircleCI</li>
+    <li>-- Vercel / Netlify</li>
+  </ul>
+  <h2>Version Control Integration</h2>
+  <div class="code-block">
+  <pre><code class="language-git"># GitHub Action
+- name: DevTools Scan
+  uses: devtools-pro/action@v2</code></pre>
+        <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+            <i class="fas fa-copy mr-1"></i>Copy
+        </button>
+    </div>
+  <p>DevTools Pro integrates seamlessly with your existing workflows.</p>
+
+  <h2>CI/CD Tools</h2>
+  <ul>
+    <li>-- GitHub Actions</li>
+    <li>-- GitLab CI</li>
+    <li>-- Jenkins</li>
+  </ul>
+
+  <h2>IDE Plugins</h2>
+  <p>VS Code extension is available to see analysis feedback directly in your editor.</p>
+</div>
+
+
+
+<div id="page-Plugins" class="doc-page hidden">
+  <h1>Plugins</h1>
+  <p>Extend DevTools Pro with official or community-created plugins.</p>
+  <h2>Popular Plugins</h2>
+  <ul>
+    <li>-- devtools-plugin-react</li>
+    <li>-- devtools-plugin-security</li>
+    <li>-- devtools-plugin-typescript</li>
+  </ul>
+  <h2>Create Your Own</h2>
+  <div class="code-block">
+  <pre><code class="language-js">module.exports = (api) => { 
+  api.on("fileAnalyze", (file) => {
+    // Custom logic
+  });
+}</code></pre>
+<button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+            <i class="fas fa-copy mr-1"></i>Copy
+          </button>
+</div>
+
+
+  <h2>Installing Plugins</h2>
+  <pre><code class="language-bash">npm install devtools-plugin-accessibility</code></pre>
+
+  <h2>Register Plugin</h2>
+  <div class="code-block">
+  <pre><code class="language-js">module.exports = {
+  plugins: ["accessibility"]
+};</code></pre>
+<button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+            <i class="fas fa-copy mr-1"></i>Copy
+          </button>
+</div>
+</div>
+
+
+<div id="page-CustomRules" class="doc-page hidden">
+  <h1>Custom Rules</h1>
+  <p>Define your own linting or code-quality rules.</p>
+
+  <h2>Example</h2>
+  <div class="clock-block">
+  <pre><code class="language-js">module.exports = {
+  rules: {
+    "no-foo-function": {
+      create(context) {
+        return {
+          Identifier(node) {
+            if (node.name === "foo") {
+              context.report({ node, message: "Avoid using 'foo'" });
+            }
+          }
+        };
+      }
+    }
+  }
+};</code></pre>
+<button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+            <i class="fas fa-copy mr-1"></i>Copy
+          </button>
+</div>
+
+
+<h2>Rule Options</h2>
+  <ul>
+    <li>-- Scope: file / function / project</li>
+    <li>-- Auto-fixable: true / false</li>
+    <li>-- Tags: readability, performance, security</li>
+  </ul>
+</div>
+
+
+
+<!-- CI/CD -->
+<div id="page-Cicd" class="doc-page hidden">
+  <h1>CI/CD Integration</h1>
+  <p>Automate code health checks in your pipeline.</p>
+  <h2>GitHub Workflow Example</h2>
+  <div class="code-block">
+  <pre><code class="language-yaml">name: DevTools Pro Scan
+
+on: [push, pull_request]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run DevTools Pro
+        run: npx devtools analyze</code></pre>
+        <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+            <i class="fas fa-copy mr-1"></i>Copy
+          </button>
+        </div>
+
+  <h2>Artifact Output</h2>
+  <ul>
+    <li>-- HTML Reports</li>
+    <li>-- JSON Logs</li>
+    <li>-- Status Badges</li>
+  </ul>
+</div>
+
+
+<div id="page-Teammgmt" class="doc-page hidden">
+  <h1>Team Management</h1>
+  <p>Manage access and permissions for your team using the DevTools Pro dashboard.</p>
+
+  <h2 class="text-amber-500">Roles</h2>
+  <ul>
+    <li><strong>Admin</strong> – Full access, billing, and rule management.</li>
+    <li><strong>Developer</strong> – Can view reports and create projects.</li>
+  </ul>
+
+  <h2>Inviting Members</h2>
+  <p>Use the dashboard to invite team members via email or SSO.</p>
+  <h2 class="text-amber-500">Dashboard Features</h2>
+  <ul>
+    <li>-- Team-wide analytics</li>
+    <li>-- Trend tracking across branches</li>
+    <li>-- Ruleset version control</li>
+  </ul>
+</div> 
+
+</div>  
+</section>
+
+    <!-- API Reference Section -->
+    <section id="api" class="section-content hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="max-w-4xl">
+                <h1 class="text-3xl font-bold mb-6">API Reference</h1>
+                <p class="text-gray-600 dark:text-gray-400 mb-8">
+                    Complete reference for the DevTools Pro REST API. All endpoints return JSON and require authentication.
+                </p>
+
+                <!-- API Endpoint -->
+                <div class="border border-gray-200 dark:border-gray-700 rounded-lg mb-8">
+                    <div class="bg-gray-50 dark:bg-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">GET</span>
+                                <code class="text-sm font-mono">/api/v1/projects</code>
+                            </div>
+                            <span class="text-sm text-gray-500">List all projects</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold mb-4">Parameters</h3>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Required</th>
+                                        <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                                    <tr>
+                                        <td class="px-4 py-2 text-sm font-mono">limit</td>
+                                        <td class="px-4 py-2 text-sm">integer</td>
+                                        <td class="px-4 py-2 text-sm">No</td>
+                                        <td class="px-4 py-2 text-sm">Number of projects to return (default: 20)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-2 text-sm font-mono">offset</td>
+                                        <td class="px-4 py-2 text-sm">integer</td>
+                                        <td class="px-4 py-2 text-sm">No</td>
+                                        <td class="px-4 py-2 text-sm">Number of projects to skip (default: 0)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3 class="text-lg font-semibold mb-4 mt-6">Example Response</h3>
+                        <div class="code-block">
+                            <pre class="bg-gray-900 text-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code class="language-json">{
+                "projects": [
+                    {
+                    "id": "proj_123",
+                    "name": "my-awesome-app",
+                    "language": "javascript",
+                    "framework": "react",
+                    "created_at": "2024-01-15T10:30:00Z",
+                    "last_analysis": "2024-01-20T14:22:00Z",
+                    "status": "active"
+                    }
+                ],
+                "total": 1,
+                "limit": 20,
+                "offset": 0
+                }</code></pre>
+                            <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+                                <i class="fas fa-copy mr-1"></i>Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Another API Endpoint -->
+                <div class="border border-gray-200 dark:border-gray-700 rounded-lg mb-8">
+                    <div class="bg-gray-50 dark:bg-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">POST</span>
+                                <code class="text-sm font-mono">/api/v1/projects/{id}/analyze</code>
+                            </div>
+                            <span class="text-sm text-gray-500">Start project analysis</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold mb-4">Request Body</h3>
+                        <div class="code-block">
+                                            <pre class="bg-gray-900 text-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code class="language-json">{
+                "rules": ["security", "performance", "best-practices"],
+                "exclude_paths": ["node_modules", "dist"],
+                "severity": "medium"
+                }</code></pre>
+                            <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+                                <i class="fas fa-copy mr-1"></i>Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CLI Section -->
+    <section id="cli" class="section-content hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="max-w-4xl">
+                <h1 class="text-3xl font-bold mb-6">CLI Reference</h1>
+                <p class="text-gray-600 dark:text-gray-400 mb-8">
+                    Complete command-line interface reference for DevTools Pro.
+                </p>
+
+                <!-- Command -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-semibold mb-4">devtools init</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                        Initialize DevTools Pro in your project directory.
+                    </p>
+                    
+                    <div class="code-block mb-4">
+                        <pre class="bg-gray-900 text-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code class="language-bash">devtools init [options]</code></pre>
+                        <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+                            <i class="fas fa-copy mr-1"></i>Copy
+                        </button>
+                    </div>
+
+                    <h3 class="text-lg font-semibold mb-3">Options</h3>
+                    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 mb-4">
+                        <div class="space-y-3">
+                            <div class="flex">
+                                <code class="text-sm font-mono bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded mr-4 min-w-0 flex-shrink-0">--template</code>
+                                <span class="text-sm">Use a predefined configuration template (react, vue, node, etc.)</span>
+                            </div>
+                            <div class="flex">
+                                <code class="text-sm font-mono bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded mr-4 min-w-0 flex-shrink-0">--force</code>
+                                <span class="text-sm">Overwrite existing configuration</span>
+                            </div>
+                            <div class="flex">
+                                <code class="text-sm font-mono bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded mr-4 min-w-0 flex-shrink-0">--interactive</code>
+                                <span class="text-sm">Run in interactive mode (default)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-lg font-semibold mb-3">Examples</h3>
+                    <div class="code-block">
+                        <pre class="bg-gray-900 text-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code class="language-bash"># Initialize with React template
+devtools init --template react
+
+# Force overwrite existing config
+devtools init --force
+
+# Initialize with custom settings
+devtools init --template node --force</code></pre>
+                        <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+                            <i class="fas fa-copy mr-1"></i>Copy
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Another Command -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-semibold mb-4">devtools analyze</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                        Run code analysis on your project.
+                    </p>
+                    
+                    <div class="code-block mb-4">
+                        <pre class="bg-gray-900 text-gray-100 p-4 rounded-md text-sm overflow-x-auto"><code class="language-bash">devtools analyze [path] [options]</code></pre>
+                        <button class="copy-button bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-xs">
+                            <i class="fas fa-copy mr-1"></i>Copy
+                        </button>
+                    </div>
+
+                    <h3 class="text-lg font-semibold mb-3">Options</h3>
+                    <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 mb-4">
+                        <div class="space-y-3">
+                            <div class="flex">
+                                <code class="text-sm font-mono bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded mr-4 min-w-0 flex-shrink-0">--rules</code>
+                                <span class="text-sm">Specify which rule sets to run (security, performance, style)</span>
+                            </div>
+                            <div class="flex">
+                                <code class="text-sm font-mono bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded mr-4 min-w-0 flex-shrink-0">--output</code>
+                                <span class="text-sm">Output format (json, html, text)</span>
+                            </div>
+                            <div class="flex">
+                                <code class="text-sm font-mono bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded mr-4 min-w-0 flex-shrink-0">--fix</code>
+                                <span class="text-sm">Automatically fix issues where possible</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Changelog Section -->
+    <section id="changelog" class="section-content hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="max-w-4xl">
+                <h1 class="text-3xl font-bold mb-6">Changelog</h1>
+                <p class="text-gray-600 dark:text-gray-400 mb-8">
+                    Stay up to date with the latest features, improvements, and bug fixes.
+                </p>
+
+                <!-- Version Entry -->
+                <div class="border-l-2 border-blue-500 pl-6 pb-8">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <h2 class="text-xl font-semibold">v2.1.0</h2>
+                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Latest</span>
+                        <span class="text-sm text-gray-500">January 20, 2024</span>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-sm font-semibold text-green-700 dark:text-green-400 mb-2">✨ New Features</h3>
+                            <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1 ml-4">
+                                <li>• AI-powered code suggestions and auto-fixes</li>
+                                <li>• Real-time collaboration features</li>
+                                <li>• Enhanced security scanning with OWASP integration</li>
+                                <li>• New React 18 and Next.js 14 support</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-sm font-semibold text-blue-700 dark:text-blue-400 mb-2">🚀 Improvements</h3>
+                            <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1 ml-4">
+                                <li>• 40% faster analysis performance</li>
+                                <li>• Improved TypeScript support</li>
+                                <li>• Better error messages and debugging info</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-sm font-semibold text-red-700 dark:text-red-400 mb-2">🐛 Bug Fixes</h3>
+                            <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1 ml-4">
+                                <li>• Fixed memory leak in large project analysis</li>
+                                <li>• Resolved CLI hanging on Windows</li>
+                                <li>• Fixed false positives in security rules</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Previous Version -->
+                <div class="border-l-2 border-gray-300 dark:border-gray-600 pl-6 pb-8">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <h2 class="text-xl font-semibold">v2.0.5</h2>
+                        <span class="text-sm text-gray-500">December 15, 2023</span>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-sm font-semibold text-blue-700 dark:text-blue-400 mb-2">🚀 Improvements</h3>
+                            <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1 ml-4">
+                                <li>• Enhanced plugin system with better API</li>
+                                <li>• Improved configuration validation</li>
+                                <li>• Better support for monorepos</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-sm font-semibold text-red-700 dark:text-red-400 mb-2">🐛 Bug Fixes</h3>
+                            <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1 ml-4">
+                                <li>• Fixed issue with nested configuration files</li>
+                                <li>• Resolved Docker image build problems</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+<!-- ....................... -->
+<!-- Pricing Section -->
+<section id="pricing" class="section-content hidden py-20 bg-gray-50 dark:bg-gray-800">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        Simple, Transparent Pricing
+      </h2>
+      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        Choose the perfect plan for your needs. Upgrade or downgrade at any time.
+      </p> 
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+      <!-- Starter Plan -->
+      <div class="pricing-card relative bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-8 transition-transform duration-300 transform hover:scale-105 hover:border-blue-500 hover:shadow-xl group">
+        <div class="text-center">
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Starter</h3>
+          <div class="mb-4">
+            <span class="text-4xl font-bold text-gray-900 dark:text-white">Free</span>
+          </div>
+          <p class="text-gray-600 dark:text-gray-300 mb-6">Perfect for individual developers and small projects</p>
+        </div>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+            Up to 3 projects
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+            Basic code analysis
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+            Community support
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+            Standard integrations
+          </li>
+        </ul>
+        <button class="w-full bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white py-3 rounded-lg transition-colors">
+          Get Started
+        </button>
+      </div>
+
+      <!-- Professional Plan (Middle) -->
+      <div class="pricing-card relative bg-white dark:bg-gray-900 border border-blue-500 dark:border-blue-400  rounded-lg p-8 transition-transform duration-300 transform group hover:scale-105 hover:border-blue-500 hover:shadow-xl">
+        <!-- Hover-only Badge -->
+        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-sm opacity-1 group-hover:opacity-100 ">
+          Most Popular
+        </div>
+        <div class="text-center">
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Professional</h3>
+          <div class="mb-4">
+            <span class="text-4xl font-bold text-gray-900 dark:text-white">$29</span>
+            <span class="text-gray-600 dark:text-gray-300">/month</span>
+          </div>
+          <p class="text-gray-600 dark:text-gray-300 mb-6">Ideal for professional developers and growing teams</p>
+        </div>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+            Unlimited projects
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+            Advanced code analysis
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+            Priority support
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+            All integrations
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+            Team collaboration
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+            Custom workflows
+          </li>
+        </ul>
+        <button class="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white py-3 rounded-lg transition-colors">
+          Get Started
+        </button>
+      </div>
+
+      <!-- Enterprise Plan -->
+      <div class="pricing-card relative bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-8 transition-transform duration-300 transform hover:scale-105 hover:border-blue-500 hover:shadow-xl group">
+        <div class="text-center">
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Enterprise</h3>
+          <div class="mb-4">
+            <span class="text-4xl font-bold text-gray-900 dark:text-white">Custom</span>
+          </div>
+          <p class="text-gray-600 dark:text-gray-300 mb-6">Tailored solutions for large organizations</p>
+        </div>
+        <ul class="space-y-3 mb-8">
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+            Everything in Professional
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+            On-premise deployment
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+            Custom integrations
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+            Dedicated support
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+            SLA guarantee
+          </li>
+          <li class="flex items-center text-gray-600 dark:text-gray-300">
+            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+            Advanced security
+          </li>
+        </ul>
+        <button class="w-full bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white py-3 rounded-lg transition-colors">
+          Contact Sales
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+<!-- ................. -->
+
+
+
+<!--   Pricing Section -->
+    <section id="pricing" class="section-content hidden py-20 bg-gray-50 dark:bg-gray-800">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8" >
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                    Simple, Transparent Pricing
+                </h2>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                    Choose the perfect plan for your needs. Upgrade or downgrade at any time.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Starter Plan -->
+                <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-8 pricing-card">
+                    <div class="text-center">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Starter</h3>
+                        <div class="mb-4">
+                            <span class="text-4xl font-bold text-gray-900 dark:text-white">Free</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">Perfect for individual developers and small projects</p>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            Up to 3 projects
+                        </li>
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            Basic code analysis
+                        </li>
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            Community support
+                        </li>
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            Standard integrations
+                        </li>
+                    </ul>
+                    <button class="w-full bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white py-3 rounded-lg transition-colors">
+                        Get Started
+                    </button>
+                </div>
+
+                <!-- Professional Plan -->
+                <div class="bg-white dark:bg-gray-900 border-2 border-blue-500 dark:border-blue-400 rounded-lg p-8 relative shadow-lg transform scale-105 pricing-card">
+                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-4 py-1 rounded-full text-sm">
+                        Most Popular
+                    </div>
+                    <div class="text-center">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Professional</h3>
+                        <div class="mb-4">
+                            <span class="text-4xl font-bold text-gray-900 dark:text-white">$29</span>
+                            <span class="text-gray-600 dark:text-gray-300">/month</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">Ideal for professional developers and growing teams</p>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            Unlimited projects
+                        </li>
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            Advanced code analysis
+                        </li>
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            Priority support
+                        </li>
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            All integrations
+                        </li>
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            Team collaboration
+                        </li>
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            Custom workflows
+                        </li>
+                    </ul>
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white py-3 rounded-lg transition-colors">
+                        Get Started
+                    </button>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-8 pricing-card">
+                    <div class="text-center">
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Enterprise</h3>
+                        <div class="mb-4">
+                            <span class="text-4xl font-bold text-gray-900 dark:text-white">Custom</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">Tailored solutions for large organizations</p>
+                    </div>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            Everything in Professional
+                        </li>
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            On-premise deployment
+                        </li>
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            Custom integrations
+                        </li>
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            Dedicated support
+                        </li>
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            SLA guarantee
+                        </li>
+                        <li class="flex items-center text-gray-600 dark:text-gray-300">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            Advanced security
+                        </li>
+                    </ul>
+                    <button class="w-full bg-gray-900 hover:bg-gray-800 dark:bg-gray-700 dark:hover:bg-gray-600 text-white py-3 rounded-lg transition-colors">
+                        Contact Sales
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+     <!-- Footer -->
+    <footer class="border-t border-gray-200 dark:border-gray-800 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="bg-blue-600 p-2 rounded-md">
+                            <i class="fas fa-terminal text-white text-sm"></i>
+                        </div>
+                        <span class="text-lg font-semibold">DevTools Pro</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-6 max-w-md">
+                        The developer tool that actually works. Built by developers, for developers.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                            <i class="fab fa-github text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                            <i class="fab fa-twitter text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                            <i class="fab fa-discord text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold mb-4">Product</h3>
+                    <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                        <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">Features</a></li>
+                        <li><a href="#pricing" class="nav-link hover:text-gray-900 dark:hover:text-gray-100 transition-colors">Pricing</a></li>
+                        <li><a href="#page-Integration" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">Integrations</a></li>
+                        <li><a href="#changelog" class="nav-link hover:text-gray-900 dark:hover:text-gray-100 transition-colors">Changelog</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-sm font-semibold mb-4">Support</h3>
+                    <ul class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                        <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">Documentation</a></li>
+                        <li><a href="#api" class="nav-link hover:text-gray-900 dark:hover:text-gray-100 transition-colors">API Reference</a></li>
+                        <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">Community</a></li>
+                        <li><a href="#" class="hover:text-gray-900 dark:hover:text-gray-100 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 dark:border-gray-800 mt-8 pt-8 text-center text-sm text-gray-500">
+                <p>&copy; 2024 DevTools Pro. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+
+      <!-- <div style="display: none;" id="error-page">
+        <h1>Page Not Found</h1>
+        <p>Server is not reachable. Please try again later.</p>
+    </div> -->
+
+    <div id="network-alert" style="
+  display:none;
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:#ff4d4d;
+  color:white;
+  padding:10px 15px;
+  border-radius:8px;
+  box-shadow:0 4px 8px rgba(0,0,0,0.2);
+  z-index:1000;
+">
+</div>
+
+</div>
+
+
+    <script>
+// .............check online or offline ..................
+
+function checkNetwork() {
+  const alertBox = document.getElementById('network-alert');
+  if (!navigator.onLine) {
+    alertBox.innerHTML = '🚫 No internet connection';
+    alertBox.style.display = 'block';
+  } else {
+    alertBox.style.display = 'none';
+  }
+}
+
+// Check on load
+checkNetwork();
+
+// Listen for online/offline changes
+window.addEventListener('offline', checkNetwork);
+window.addEventListener('online', checkNetwork);
+
+
+// .....................
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const html = document.documentElement;
+
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            html.classList.add('dark');
+            themeIcon.className = 'fas fa-sun text-sm';
+        } else {
+            html.classList.remove('dark');
+            themeIcon.className = 'fas fa-moon text-sm';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                themeIcon.className = 'fas fa-moon text-sm';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                themeIcon.className = 'fas fa-sun text-sm';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                
+                mobileMenuIcon.className = 'fas fa-times text-sm';
+            } else {
+                mobileMenu.classList.add('hidden');
+                mobileMenuIcon.className = 'fas fa-bars text-sm';
+            }
+        });
+
+        // Navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.section-content');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                
+                // Hide all sections
+                sections.forEach(section => {
+                    section.classList.add('hidden');
+                });
+                
+                // Show target section
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                    targetSection.classList.add('fade-in');
+                }
+                
+                // Update active nav link
+                navLinks.forEach(l => l.classList.remove('text-blue-600'));
+                link.classList.add('text-blue-600');
+                
+                // Close mobile menu
+                mobileMenu.classList.add('hidden');
+                mobileMenuIcon.className = 'fas fa-bars text-sm';
+            });
+        });
+
+        // Tabs
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.getAttribute('data-tab');
+                
+                // Update button styles
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('border-blue-500', 'text-blue-600');
+                    btn.classList.add('border-transparent', 'text-gray-500');
+                });
+                button.classList.remove('border-transparent', 'text-gray-500');
+                button.classList.add('border-blue-500', 'text-blue-600');
+                
+                // Update tab content
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(targetTab + '-tab').classList.add('active');
+            });
+        });
+
+        // Copy to clipboard
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.copy-button')) {
+                const button = e.target.closest('.copy-button');
+                const codeBlock = button.previousElementSibling;
+                const code = codeBlock.textContent;
+                
+                navigator.clipboard.writeText(code).then(() => {
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-check mr-1"></i>Copied!';
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                    }, 2000);
+                });
+            }
+        });
+
+        // Initialize with home section visible
+        document.getElementById('home').classList.remove('hidden');
+        document.querySelector('a[href="#home"]').classList.add('text-blue-600');
+
+
+        //get started overlay
+      
+            function showOverlay() {
+                const modal = document.getElementById('welcome-modal');
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Prevent background scroll
+            }
+
+            document.getElementById('close-modal').addEventListener('click', () => {
+                document.getElementById('welcome-modal').classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            });
+
+            document.getElementById('start-trial').addEventListener('click', () => {
+                document.getElementById('welcome-modal').classList.add('hidden');
+                document.getElementById('pricing').classList.add('hidden');
+                document.getElementById('home').classList.remove('hidden');
+                document.body.style.overflow = 'auto';
+                alert("Free trial started!");
+            });
+
+            document.getElementById('view-pricing').addEventListener('click', () => {
+                window.location.href = "#pricing"; // change to actual pricing section or URL
+            });
+
+           
+
+
+
+        //for overlay
+      
+        window.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('welcome-modal');
+            const closeModal = document.getElementById('close-modal');
+            const startTrial = document.getElementById('start-trial');
+            const viewPricing = document.getElementById('view-pricing');
+
+            // Close modal
+            closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+            });
+
+            // Button: Continue with Free Trial
+            startTrial.addEventListener('click', () => {
+            modal.style.display = 'none';
+            alert("You're starting your free trial!");
+            // You can redirect or show another step here
+            });
+  });
+
+
+ 
+        //pricing when cliking button
+        const home = document.getElementById('home');
+        const pricing = document.getElementById('pricing');
+        const priceBtn = document.getElementById('priceBtn');
+
+        // Disable auto-showing based on hash
+        window.addEventListener('DOMContentLoaded', () => {
+            // Always hide pricing by default
+            pricing.classList.add('hidden');
+            home.classList.remove('hidden');
+
+            // Only show pricing after button click
+            priceBtn.addEventListener('click', () => {
+            home.classList.add('hidden');
+            pricing.classList.remove('hidden');
+            window.location.hash = 'pricing'; // optional, for navigation feel
+            });
+        });
+
+        // Optional: Hide pricing again if user manually changes hash
+        window.addEventListener('hashchange', () => {
+            if (window.location.hash !== '#pricing') {
+            pricing.classList.add('hidden');
+            home.classList.remove('hidden');
+            }
+        });
+
+
+
+    //pricing shown for view pricing button 
+        const overlaypricebtn = document.getElementById('view-pricing');
+        const welcomemodal = document.getElementById('welcome-modal');
+        const trialbtn = document.getElementById('start-Trial');
+
+         window.addEventListener('DOMContentLoaded', () => {
+            // Always hide pricing by default
+            pricing.classList.add('hidden');
+            home.classList.remove('hidden');
+
+            // Only show pricing after button click
+            overlaypricebtn.addEventListener('click', () => {
+            home.classList.add('hidden');
+            pricing.classList.remove('hidden');
+            overlaypricebtn.classList.add('hidden');
+            trailbtn.classList.add('hidden');
+            welcomemodal.classList.add('hidden');
+            window.location.hash = 'pricing'; // optional, for navigation feel
+            });
+        }); 
+            window.addEventListener('hashchange', () => {
+            if (window.location.hash !== '#pricing') {
+            pricing.classList.add('hidden');
+            home.classList.remove('hidden');
+            }
+        });
+
+
+//sidebars
+// ......... Doc sidebars .............
+
+ document.addEventListener("DOMContentLoaded", () => {
+    const links = document.querySelectorAll(".doc-link");
+    const pages = document.querySelectorAll(".doc-page");
+
+    links.forEach(link => {
+      link.addEventListener("click", e => {
+        e.preventDefault();
+
+        const selectedPage = link.getAttribute("data-page");
+
+        // Remove active class from all links
+        links.forEach(l => l.classList.remove("active"));
+        link.classList.add("active");
+
+        // Hide all pages
+        pages.forEach(page => page.classList.add("hidden"));
+
+        // Show only selected page
+        const showPage = document.getElementById(`page-${selectedPage}`);
+        if (showPage) {
+          showPage.classList.remove("hidden");
+        }
+
+        // Specifically hide the installation page if it's not clicked
+        if (selectedPage !== "installation") {
+          const installPage = document.getElementById("page-installation");
+          if (installPage) installPage.classList.add("hidden");
+        }
+      });
+    });
+  });
+
+
+    </script>
+</body>
+</html>
