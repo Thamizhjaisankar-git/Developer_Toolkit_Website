@@ -1,17 +1,17 @@
 # ⚡ DevTools Pro – The Web Developer Toolkit  
 
 A modern **documentation-style toolkit website** for web developers.  
-Built with **HTML, SCSS, TailwindCSS, and JavaScript**, featuring responsive layouts, sidebar navigation, and a clean developer-friendly UI.  
+Built with **HTML, SCSS, TailwindCSS, and JavaScript**, featuring responsive layouts, sidebar navigation and a clean developer-friendly UI.  
 
 
 ## 🚀 Features  
 
-- 📚 **Documentation Hub** – Installation, Quick Start, and Configuration guides.  
+- 📚 **Documentation Hub** – Installation, Quick Start and Configuration guides.  
 - ⚡ **Code Analysis Tools** – Integrated static analysis and debugging tips.  
 - 🔌 **Plugin & Integration Support** – Extend functionality with custom rules and third-party integrations.  
 - 🖥️ **CLI & API References** – Detailed command-line interface documentation and API usage examples.  
 - 🏗️ **CI/CD Integration** – Seamlessly connect with your deployment pipelines.  
-- 👥 **Team Management** – Manage members, permissions, and collaboration efficiently.  
+- 👥 **Team Management** – Manage members, permissions and collaboration efficiently.  
 - 🌗 **Dark & Light Themes** – Developer-friendly UI for long coding sessions.  
 - 📊 **Changelog Section** – Keep track of version updates and new features.  
 - 🧭 **Sidebar Navigation** – Quick access to all documentation pages.  
@@ -77,5 +77,10 @@ To run locally:
 
 
 👨‍💻 Author
+
+- 💼 [LinkedIn](https://www.linkedin.com/in/thamizhjaisankar)  
+- 🌐 [Portfolio](https://portfolio-fawn-beta-24.vercel.app/)  
+- ✉️ [Email Me](mailto:thamizhjaisankar@gmail.com)  
+
 
 
