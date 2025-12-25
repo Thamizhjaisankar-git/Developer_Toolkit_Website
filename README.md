@@ -38,9 +38,6 @@ Built with **HTML, CSS, TailwindCSS and JavaScript**, featuring responsive layou
   Run the project by opening index.html in your browser. 🎉
   
 
-## 📸 Screenshots
-
-
 ## 📊 Future Enhancements
 
 - 🔐 User Authentication for private docs
