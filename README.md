@@ -23,47 +23,20 @@ Built with **HTML, SCSS, TailwindCSS, and JavaScript**, featuring responsive lay
 - **Styling:** SCSS, TailwindCSS  
 - **Design:** Responsive grid-based layouts, dark & light themes  
 
----
-
-## 📂 Project Structure  
-    ```bash
-    DevTools-Pro/
-    │── index.html # Main entry point
-    │── /assets # Images, icons
-     │── /src
-     ├── scss/ # SCSS source files
-    ├── css/ # Compiled CSS
-    └── js/ # JavaScript files
-    │── /docs # Documentation pages
-    │── README.md # Project readme
-
 
 ## ⚡ Installation & Setup  
 
 1. Clone the repository:  
    ```bash
-    git clone https://github.com/yourusername/devtools-pro.git
+    git clone https://github.com/Thamizhjaisankar-git/Developer_Toolkit_Website
     cd devtools-pro
-    Compile SCSS to CSS:
 
 2. Compile Tailwind CSS:
-     ```bash
-     sass --watch src/scss:dist/css
-
-3. Compile Tailwind CSS:
    ```bash
    npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch
    
   Run the project by opening index.html in your browser. 🎉
-
-4. 🧪 Testing / Running
-   
-Since this project is built with HTML, SCSS, TailwindCSS and JavaScript, no Node-based testing framework is required.
-
-To run locally:
-1. Compile SCSS & Tailwind (commands above).
-2. Open index.html in any browser.
-
+  
 
 ## 📸 Screenshots
 
@@ -76,11 +49,9 @@ To run locally:
 - 🌍 Multi-language Documentation Support
 
 
-👨‍💻 Author
+## 👨‍💻 Author
 
 - 💼 [LinkedIn](https://www.linkedin.com/in/thamizhjaisankar)  
-- 🌐 [Portfolio](https://portfolio-fawn-beta-24.vercel.app/)  
+- 🌐 [Portfolio](https://thamizh-jl.vercel.app/)  
 - ✉️ [Email Me](mailto:thamizhjaisankar@gmail.com)  
-
-
 
