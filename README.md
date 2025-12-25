@@ -1,7 +1,7 @@
 # ⚡ DevTools Pro – The Web Developer Toolkit  
 
 A modern **documentation-style toolkit website** for web developers.  
-Built with **HTML, SCSS, TailwindCSS, and JavaScript**, featuring responsive layouts, sidebar navigation and a clean developer-friendly UI.  
+Built with **HTML, CSS, TailwindCSS and JavaScript**, featuring responsive layouts, sidebar navigation and a clean developer-friendly UI.  
 
 
 ## 🚀 Features  
